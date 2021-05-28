@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">按钮</button>
+
+    <script>
+        let btn=document.getElementById('btn')
+        btn.onclick = function () {
+            //1.创建一个promise实例对象
+            //2.new promise的同步回调立刻执行
+            //3.执行异步代码
+            //4.执行promise.then方法 此时then的两个回调还没有进入队列
+            //什么时候promise的状态发生变化了，什么时候then的回调才会进入队列
+            //5.当定时器事件到了，调用了reject().promise的状态变成了失败，这是将then的第二个回调函数放在队列中，还没有执行
+            //6.执行reject后面的代码，当这里的代码执行完毕，表示主线程代码执行完毕
+            //7.将放在队列中的then的第二个回调拿到主线程中执行
+        const promise=new Promise((resolve,reject)=>{
+            console.log('promise的同步回调执行了')
+
+            setTimeout(() => {
+                reject('345')
+                console.log(promise)
+            }, 2000);
+          
+        })
+
+        promise.then(
+            (value)=>{
+                console.log('promise成功了',value)
+
+            },
+            (value)=>{
+                console.log('promise失败了',value)
+            }
+        )
+    }
+    </script>
+</body>
+</html>
